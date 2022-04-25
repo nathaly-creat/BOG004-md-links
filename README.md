@@ -55,7 +55,7 @@ desarrollador porque te obliga a pensar en la interfaz (API) de tus
 _módulos_ y cómo será usado por otros developers. Debes tener especial
 consideración en peculiaridades del lenguaje, convenciones y buenas prácticas.
 
-## 3. Objetivos de aprendizaje
+## 3. Objetivos de aprendizaje 
 
 Reflexiona y luego marca los objetivos que has llegado a entender y aplicar en tu proyecto. Piensa en eso al decidir tu estrategia de trabajo.
 
@@ -160,7 +160,7 @@ Reflexiona y luego marca los objetivos que has llegado a entender y aplicar en t
 
 - [ ] **Uso de identificadores descriptivos (Nomenclatura y Semántica)**
 
-### Node.js
+### Node.js 📚
 
 - [ ] **Instalar y usar módulos con npm**
 
@@ -219,7 +219,7 @@ Reflexiona y luego marca los objetivos que has llegado a entender y aplicar en t
 
 - [ ] **GitHub: Organización en Github (projects | issues | labels | milestones | releases)**
 
-### HTTP
+### HTTP 
 
 - [ ] **Consulta o petición (request) y respuesta (response).**
 
