@@ -5,128 +5,184 @@ const process = require('process');
 const { Console } = require('console');
 const fsp = require("fs").promises;
 const axios = require('axios');
+const { get } = require('http');
+
+// axios({
+//   method: 'get',
+//   url: 'www.google.com',
+//   proxy: '127.0.0.1',
+// }).then(response => {
+//   console.log('PETICIONNNNNNNNNNNN', response.code);
+// }).catch(error => {
+//   console.log('erroHTTP', error);});
+
 
 const imputRoute = process.argv[2];
 
 
-const pathAbsolute = (imputimputRoute) => path.isAbsolute(imputimputRoute) ? imputimputRoute : path.resolve(imputimputRoute);
-const isFileMd = (imputimputRoute) => path.extname(imputimputRoute) === ".md";
-const isDirectory = (imputimputRoute) => fs.lstatSync(imputimputRoute).isDirectory();
-const isFile = (imputimputRoute) => fs.lstat(imputimputRoute).isFile();
+const pathAbsolute = (imputRoute) => path.isAbsolute(imputRoute) ? imputRoute : path.resolve(imputRoute);
+const isFileMd = (imputRoute) => path.extname(imputRoute) === ".md";
+const isDirectory = (imputRoute) => fs.lstatSync(imputRoute).isDirectory();
+// const isFile = (imputRoute) => fs.lstat(imputRoute).isFile();
 // console.log('isFile', isFile(imputRoute));
 console.log('ABSOLIUTA', pathAbsolute(imputRoute));
 
 // IDENTIFICAR TIPO ENTRADA Y EJECUTAR FUNCIONES DE CONTENIDO DE LA RUTA.
-fs.stat(imputRoute, (err, stats) => {
-if (err) {
-  console.log('No es una ruta válida');
-  return;
-} else if (stats.isFile()) {
-  if (isFileMd(imputRoute)) {
-    console.log('Es un archivo .md', isFileMd(imputRoute));
-    getLinks(imputRoute);
-  } else {  
-    console.log('No es un archivo .md,'+' intente con una ruta válida');
-  }
-  
-  const file = fs.readFileSync(imputRoute, 'utf8');
-  console.log(file);
-  return;
-} else if (stats.isDirectory()) {
-  console.log('es un directorio', true);
-  const filesDirectory = fs.readdirSync(imputRoute); /*conectar en esta línea la funcion recursiva*/
-  // console.log('arrayVisto', files);
-  if (filesDirectory.length === 0) {
-    console.log('No hay archivos .md en el directorio');
+const readPath = fs.stat(imputRoute, (err, stats) => new Promise((resolve, reject) => {
+  if (err) {
+    console.log('No es una ruta válida');
+    reject(err);
   } else {
-    console.log('este es el contenido del directorio:', filesDirectory);
-    if (filesDirectory.length > 0) {
-    console.log('archivos recursivos TOTALES', getFiles(imputRoute));
+    if (stats.isFile()) {
+      resolve('file');
+    } else if (stats.isDirectory()) {
+      resolve('directory', isDirectory(imputRoute));
+    } else {
+      reject('No es un archivo.md o un directorio');
     }
-  } 
+  }
   return;
-  };
+}).then((type) => {
+  if (type === 'file') {
+    console.log('Es un archivo .md', isFileMd(imputRoute));
+    getLinks(imputRoute); // Ejecuto la función en simultaneo para extraer links.
+  } else if (type === 'directory') {
+    console.log('Es un directorio', isDirectory(imputRoute));
+    getFiles(imputRoute); // barrido de archivos .md en directorio.
+    const filesDirectory = fs.readdirSync(imputRoute); /*conectar en esta línea la funcion recursiva*/
+    switch (type) {
+      case filesDirectory.length > 0:
+        console.log('Hay archivos .md en el directorio');
+        getLinksFiles(filesDirectory);
+        break;
+      case filesDirectory.length === 0:
+        console.log('No hay archivos .md en el directorio');
+        break;
+        default:
+        }
+      }
+    }
+  )
+  .catch((err) => console.log('Error', err))
+);
 
-});
 
-/*MODELO 1 FUNCION DE RECURSIVIDAD*/
+// );
+//     // return;
+//   }).catch((err) => {        
+//     console.log('Error', err);
+//   }); 
+  
+  // if (filesDirectory.length === 0) {
+  //   console.log('No hay archivos .md en el directorio');
+  // } else {
+  //   switch (type) {
+  
+  
+  // (filesDirectory.length > 0) {
+    // // console.log('globalFiles', filesDirectory);
+// // pathAbsolute(imputRoute);
+//     /* ESTA ES LA SECCION QUE ME RETORNA UNDEFINED*/
+// getFiles(filesDirectory);
+// console.log('directo > 0', getFiles(filesDirectory));
+// // console.log('archivos recursivos TOTALES', getFiles(pathAbsolute(imputRoute)));
+// }
+// } 
+// return ;
+// }
+// }).catch((err) => {
 
-// EXTRAER ARCHIVOS DE UN DIRECTORIO con accion recursividad.
-const getFiles = (pathAbsolute) => {
+
+
+/*CODIGO ANTERIOR DE VALIDACION DE RUTA*/
+// if (err) {
+//   console.log('No es una ruta válida');
+//   return;
+// } else if (stats.isFile()) {
+//   if (isFileMd(imputRoute)) {
+//     console.log('Es un archivo .md', isFileMd(imputRoute));
+//     getLinks(imputRoute);
+//   } else {  
+//     console.log('No es un archivo .md,'+' intente con una ruta válida');
+//   }  
+                                /*CAMBIAR ESTA LINEA EN README NO USAR readFileSync*/
+//     const file = fs.readFileSync(imputRoute, 'utf8'); // NO USAR readFileSync
+//     console.log(file);
+//     return;
+    
+//   } else if (stats.isDirectory()) {
+//     console.log('es un directorio', true);
+  //   const filesDirectory = fs.readdirSync(imputRoute); /*conectar en esta línea la funcion recursiva*/
+  //     if (filesDirectory.length === 0) {
+  //       console.log('No hay archivos .md en el directorio');
+  //     } else {
+  //       console.log('este es el contenido del directorio:', filesDirectory);
+  //       if (filesDirectory.length > 0) {
+  //       console.log('globalFiles', filesDirectory);
+  //       pathAbsolute(imputRoute);
+  //           /* ESTA ES LA SECCION QUE ME RETORNA UNDEFINED*/
+  //       console.log('archivos recursivos TOTALES', getFiles(imputRoute));
+  //       }
+  //     } 
+  // return ;
+  // };
+
+// });
+
+// /*MODELO 1 FUNCION DE RECURSIVIDAD*/
+let globalLinks = [];
+const getFiles = (pathAbsolute) => new Promise((resolve, reject) => {
     let arrFiles = [];
-    console.log('mdEncontrados', arrFiles); // array vacio
-    const files = fs.readdirSync(pathAbsolute);
+    const files = fs.readdirSync(pathAbsolute);  
     files.forEach(file => {
-        const filePath = path.join(pathAbsolute, file);
+        const filePath = path.join(pathAbsolute, file); 
         if (isFileMd(filePath)) {
-            console.log('pushArchivos', arrFiles.push(filePath));
+          resolve(arrFiles.push(filePath));
+          // resolve(console.log('pushArchivos', arrFiles.push(filePath)));
         } else if (isDirectory(filePath)) {
-          arrFiles = arrFiles.concat(getFiles(filePath));
+          resolve(arrFiles = arrFiles.concat(getFiles(filePath)));
         }
-        else {
-          console.log('Fin del programa');
-        }
+        // else {
+        //   reject(new Error('No se encontraron archivos .md'));
+        //   // console.log('Fin del programa');
+        // }
     });
    
-    console.log('filesFilterRecursividad', files.filter(file => isFileMd(file)));
-    return arrFiles.push(files.filter(file => isFileMd(file)));
-};
+    // console.log('filesFilterRecursividad', files.filter(file => isFileMd(file)));
+    globalLinks.push(...files.filter(file => isFileMd(file)));
+    console.log('Total de archivos.md: ', globalLinks);
+});
 
-/* ---------- Obtener links archivo .md ---------- */
+
+// /* ---------- Obtener links archivo .md ---------- */
 const getLinks = (imputRoute) => new Promise((resolve, reject) => {
   let fileLinks = imputRoute;
 
   fs.readFile(fileLinks, 'utf-8', (error, data) => {
     const regularExpression = /\[([^\[]+)\](\(.*\))/g;
     const internalLinks = data.match(regularExpression);
-    console.log('links encontrados INTERNAL: ', internalLinks)
-
-    fileLinks = pathAbsolute(imputRoute); 
-    console.log('nueva', fileLinks); 
-
+    console.log('links encontrados INTERNAL: ', internalLinks);
     if (error) {
       reject(new Error(`${error.code}, verifica la ruta del archivo`));
-    } else if (data.match(regularExpression) === null) {
+    } else if (data.match(regularExpression) !== null) {
       const links = data.match(regularExpression);
       resolve(links);
-      const arrayLinks = links.map(link => link.replace(/\[|\]|\(|\)/g, ''));
-      console.log('links encontrados: ', links); /*array de links VALIDAR*/ 
-      console.log('AQUIIII links encontrados: ', arrayLinks); /*array de links VALIDAR*/
-      /*Crear la estructura del array de Links*/
-      const arrayLinksStructure = arrayLinks.map(link => {
-        const destructure = link.split(' ');
-        const linkName = destructure[0].replace(/\[|\]/g, '').substring(0, destructure[50].length - 1);
-        const linkUrl = destructure[1].replace(/\(|\)/g, '');
-
+      const arrayLinksStructure = links.map(link => {
+        const linkName = link.match(/\[.*\]/)[0].replace(/\[|\]/g, '');
+        const linkUrl = link.match(/\(.*\)/)[0].replace(/\(|\)/g, '');
         return {
-          name: linkName,
-          url: linkUrl
+          text: linkName,
+          url: linkUrl,
+          file: fileLinks,
+
         };
       });
-      console.log('arrayLinksStructure', arrayLinksStructure);
+      console.log('Destructure', arrayLinksStructure);
 
-        // const linkStructure = {
-        //   text: link,
-        //   href: `${internalLinks}${link}`
-        //   fileLinks: fileLinks,
-        // };
-        // // return linkStructure;
-        // console.log('links estructura Array: ', linkStructure); /*array de links VALIDAR*/
-    // else if (data.match(regularExpression)) {
-    //   const arr = data.match(regularExpression);
-
-    //   const links = arr.map((item) => {
-    //     const divideItem = item.split('](');
-    //     const text = divideItem[0].replace('[', ''); // .substring(0, 50); ¿README?
-    //     const href = divideItem[1].replace(')', '');
-    //     return ({ href, text, fileLinks });
-    //   });
-
-    //   const getLinksWithUrl = links.filter((link) => !link.href.startsWith(internalLinks));
-    //   resolve(getLinksWithUrl);
+       
     } else {
-      resolve({ href: 'No se encontraron links', text: 'No se encontraron links', file });
-      // resolve([]);
+      
+      resolve([]);
     }
   });
 });
@@ -138,8 +194,11 @@ const getLinksFiles = (arrMdFiles) => {
   arrMdFiles.forEach((file) => filesPromises.push(getLinks(file)));
   return filesPromises;
 };
-console.log('filesPromises', filesPromises);
-console.log('getLinksFiles', getLinksFiles(filesPromises));
+
+// console.log('filesPromises', filesPromises);
+// console.log('getLinksFiles', getLinksFiles(filesPromises));
+
+// // } cierre de module.export
 
 
 
