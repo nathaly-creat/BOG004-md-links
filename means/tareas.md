@@ -14,7 +14,45 @@
         if (.md) la funcion de si es sólo un archivo.md
             a) arrayMd donde se guarda el archivo.md
 
-            
+- Codigo de prueba de recursividad
+var settings = {
+    root: './',
+    entryType: 'all',
+    // Filtrar archivos con extensión js y json
+    fileFilter: [ '*.md'],
+    // Filtrar por directorio
+    directoryFilter: [ '!.git', '!*modules' ],
+    // Trabajar con archivos hasta 100 subdirectorio de profundidad
+    depth: 100,
+};  // Import the module
+var readdirp = require('readdirp');
+
+
+### // En este ejemplo, esta variable almacenará todas las rutas de los archivos y directorios dentro de la ruta proporcionada
+var allFilePaths = [];
+
+// Iterar recursivamente a través de una carpeta
+readdirp(settings)
+    .on('data', function (entry) {
+        // ejecutar cada vez que se encuentre un archivo en el directorio de proveedores
+
+        // Almacene la ruta completa del archivo / directorio en nuestra matriz personalizada
+        allFilePaths.push(
+            entry.fullPath
+        );
+    })
+    .on('warn', function(warn){
+        console.log("Warn: ", warn);
+    })
+    .on('error', function(err){
+        console.log("Error: ", err);
+    })
+    .on('end', function(){
+
+        console.log(allFilePaths);
+        // ["c:/file.txt","c:/other-file.txt" ...]
+    })
+;    
    
         
 

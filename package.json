@@ -33,6 +33,8 @@
     "jest": "^27.5.1"
   },
   "dependencies": {
-    "chalk": "^5.0.1"
+    "axios": "^0.27.0",
+    "chalk": "^5.0.1",
+    "readdirp": "^3.6.0"
   }
 }
