@@ -1,3 +1,32 @@
+ /* Estrucutra para HTTP request*/
+Verbose: GET para peticion porque requiero resp.
+Libreria: Axios o Fetch.
+const axios = requiere('axios').default.
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ /*estructura para validacion de ruta*/
+ 
  - identificar tipo de ruta funcion ValidatePath => mensaje Ruta no Valida. detengo el proceso. buscar node metodo de validacion ✅
 
 1. Lectura de Path y validar si es absoluta... /crear la funcion que valide el tipo de ruta ✅

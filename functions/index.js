@@ -4,7 +4,7 @@ const fs = require('fs');
 const process = require('process');
 const { Console } = require('console');
 const fsp = require("fs").promises;
-const axios = require('axios');
+const axios = require('axios').default;
 const { get } = require('http');
 
 // axios({
@@ -18,38 +18,38 @@ const { get } = require('http');
 
 
 const imputRoute = process.argv[2];
-
-
 const pathAbsolute = (imputRoute) => path.isAbsolute(imputRoute) ? imputRoute : path.resolve(imputRoute);
-const isFileMd = (imputRoute) => path.extname(imputRoute) === ".md";
-const isDirectory = (imputRoute) => fs.lstatSync(imputRoute).isDirectory();
+let pathAbs = pathAbsolute(imputRoute);
+const isFileMd = (pathAbs) => path.extname(pathAbs) === ".md";
+const isDirectory = (pathAbs) => fs.lstatSync(pathAbs).isDirectory();
 // const isFile = (imputRoute) => fs.lstat(imputRoute).isFile();
 // console.log('isFile', isFile(imputRoute));
-console.log('ABSOLIUTA', pathAbsolute(imputRoute));
+console.log('ABSOLUTA', pathAbsolute(imputRoute));
 
 // IDENTIFICAR TIPO ENTRADA Y EJECUTAR FUNCIONES DE CONTENIDO DE LA RUTA.
-const readPath = fs.stat(imputRoute, (err, stats) => new Promise((resolve, reject) => {
+
+const readPath = fs.stat(pathAbs, (err, stats) => new Promise((resolve, reject) => {
   if (err) {
-    console.log('No es una ruta válida');
+    console.log(' ❌ No es una ruta válida');
     reject(err);
   } else {
     if (stats.isFile()) {
       resolve('file');
     } else if (stats.isDirectory()) {
-      resolve('directory', isDirectory(imputRoute));
+      resolve('directory', isDirectory(pathAbs));
     } else {
-      reject('No es un archivo.md o un directorio');
+      reject(' ❌ No es un archivo.md o un directorio');
     }
   }
-  return;
+  return readPath;
 }).then((type) => {
   if (type === 'file') {
-    console.log('Es un archivo .md', isFileMd(imputRoute));
-    getLinks(imputRoute); // Ejecuto la función en simultaneo para extraer links.
+    console.log('Es un archivo .md', isFileMd(pathAbs));
+    getLinks(pathAbs); // Ejecuto la función en simultaneo para extraer links.
   } else if (type === 'directory') {
-    console.log('Es un directorio', isDirectory(imputRoute));
-    getFiles(imputRoute); // barrido de archivos .md en directorio.
-    const filesDirectory = fs.readdirSync(imputRoute); /*conectar en esta línea la funcion recursiva*/
+    console.log('Es un directorio', isDirectory(pathAbs));
+    getFiles(pathAbs); // barrido de archivos .md en directorio.
+    const filesDirectory = fs.readdirSync(pathAbs); /*conectar en esta línea la funcion recursiva*/
     switch (type) {
       case filesDirectory.length > 0:
         console.log('Hay archivos .md en el directorio');
@@ -131,11 +131,11 @@ const readPath = fs.stat(imputRoute, (err, stats) => new Promise((resolve, rejec
 
 // /*MODELO 1 FUNCION DE RECURSIVIDAD*/
 let globalLinks = [];
-const getFiles = (pathAbsolute) => new Promise((resolve, reject) => {
+const getFiles = (pathAbs) => new Promise((resolve, reject) => {
     let arrFiles = [];
-    const files = fs.readdirSync(pathAbsolute);  
+    const files = fs.readdirSync(pathAbs);  
     files.forEach(file => {
-        const filePath = path.join(pathAbsolute, file); 
+        const filePath = path.join(pathAbs, file); 
         if (isFileMd(filePath)) {
           resolve(arrFiles.push(filePath));
           // resolve(console.log('pushArchivos', arrFiles.push(filePath)));
@@ -155,8 +155,8 @@ const getFiles = (pathAbsolute) => new Promise((resolve, reject) => {
 
 
 // /* ---------- Obtener links archivo .md ---------- */
-const getLinks = (imputRoute) => new Promise((resolve, reject) => {
-  let fileLinks = imputRoute;
+const getLinks = (pathAbs) => new Promise((resolve, reject) => {
+  let fileLinks = pathAbs;
 
   fs.readFile(fileLinks, 'utf-8', (error, data) => {
     const regularExpression = /\[([^\[]+)\](\(.*\))/g;
