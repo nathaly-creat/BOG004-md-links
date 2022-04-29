@@ -245,8 +245,10 @@
 
 
 // estatus de las promesas pending
-const linksPromises = arrayLinks.map(link => getLinks(link)); 
-      console.log('linksPromises', linksPromises);
+// const linksPromises = arrayLinks.map(link => getLinks(link)); 
+//       console.log('linksPromises', linksPromises);
+
+//       ✅
 
        // const linkStructure = {
         //   text: link,
