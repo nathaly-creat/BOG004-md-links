@@ -6,6 +6,21 @@
 
 // // const mdLinks = require('./mdLinks');
 
+const isFile = (imputRoute) => fs.lstat(imputRoute).isFile();
+// console.log('isFile', isFile(imputRoute));
+
+ /* CODIGO DE AXIOS */
+// axios({
+//   method: 'get',
+//   url: 'www.google.com',
+//   proxy: '127.0.0.1',
+// }).then(response => {
+//   console.log('PETICIONNNNNNNNNNNN', response.code);
+// }).catch(error => {
+//   console.log('erroHTTP', error);});
+
+
+
 
 
 // // const isDirectory = stats.isDirectory();
@@ -334,3 +349,253 @@
 //     )
 //     .catch((err) => console.log('Error', err))
 //   );
+
+
+// - Codigo de prueba de recursividad
+// var settings = {
+//     root: './',
+//     entryType: 'all',
+//     // Filtrar archivos con extensión js y json
+//     fileFilter: [ '*.md'],
+//     // Filtrar por directorio
+//     directoryFilter: [ '!.git', '!*modules' ],
+//     // Trabajar con archivos hasta 100 subdirectorio de profundidad
+//     depth: 100,
+// };  // Import the module
+// var readdirp = require('readdirp');
+
+
+// ### // En este ejemplo, esta variable almacenará todas las rutas de los archivos y directorios dentro de la ruta proporcionada
+// var allFilePaths = [];
+
+// // Iterar recursivamente a través de una carpeta
+// readdirp(settings)
+//     .on('data', function (entry) {
+//         // ejecutar cada vez que se encuentre un archivo en el directorio de proveedores
+
+//         // Almacene la ruta completa del archivo / directorio en nuestra matriz personalizada
+//         allFilePaths.push(
+//             entry.fullPath
+//         );
+//     })
+//     .on('warn', function(warn){
+//         console.log("Warn: ", warn);
+//     })
+//     .on('error', function(err){
+//         console.log("Error: ", err);
+//     })
+//     .on('end', function(){
+
+//         console.log(allFilePaths);
+//         // ["c:/file.txt","c:/other-file.txt" ...]
+//     })
+// ;    
+   
+// );
+//     // return;
+//   }).catch((err) => {        
+//     console.log('Error', err);
+//   }); 
+  
+  // if (filesDirectory.length === 0) {
+  //   console.log('No hay archivos .md en el directorio');
+  // } else {
+  //   switch (type) {
+  
+  
+  // (filesDirectory.length > 0) {
+    // // console.log('globalFiles', filesDirectory);
+// // pathAbsolute(imputRoute);
+//     /* ESTA ES LA SECCION QUE ME RETORNA UNDEFINED*/
+// getFiles(filesDirectory);
+// console.log('directo > 0', getFiles(filesDirectory));
+// // console.log('archivos recursivos TOTALES', getFiles(pathAbsolute(imputRoute)));
+// }
+// } 
+// return ;
+// }
+// }).catch((err) => {
+
+
+
+/*CODIGO ANTERIOR DE VALIDACION DE RUTA*/
+// if (err) {
+//   console.log('No es una ruta válida');
+//   return;
+// } else if (stats.isFile()) {
+//   if (isFileMd(imputRoute)) {
+//     console.log('Es un archivo .md', isFileMd(imputRoute));
+//     getLinks(imputRoute);
+//   } else {  
+//     console.log('No es un archivo .md,'+' intente con una ruta válida');
+//   }  
+                                /*CAMBIAR ESTA LINEA EN README NO USAR readFileSync*/
+//     const file = fs.readFileSync(imputRoute, 'utf8'); // NO USAR readFileSync
+//     console.log(file);
+//     return;
+    
+//   } else if (stats.isDirectory()) {
+//     console.log('es un directorio', true);
+  //   const filesDirectory = fs.readdirSync(imputRoute); /*conectar en esta línea la funcion recursiva*/
+  //     if (filesDirectory.length === 0) {
+  //       console.log('No hay archivos .md en el directorio');
+  //     } else {
+  //       console.log('este es el contenido del directorio:', filesDirectory);
+  //       if (filesDirectory.length > 0) {
+  //       console.log('globalFiles', filesDirectory);
+  //       pathAbsolute(imputRoute);
+  //           /* ESTA ES LA SECCION QUE ME RETORNA UNDEFINED*/
+  //       console.log('archivos recursivos TOTALES', getFiles(imputRoute));
+  //       }
+  //     } 
+  // return ;
+  // };
+
+// });
+
+
+const files = fs.readdirSync(pathAbs).filter(file => isFileMd(file));
+    console.log('files', files);
+    
+    files.forEach((file) => {
+      const filePath = path.join(pathAbs, file);
+      const fileContent = fs.readSync(filePath, 'utf8');
+      const fileLinks = getLinks(fileContent);
+      arrFiles.push(fileLinks);
+    });
+
+
+
+    linksPromises = [];
+  arrayPathAbs.forEach((file) => {
+    linksPromises.push(getLinksMd(file));
+    const arrayLinks = Promise.all(linksPromises).then((links) => {
+    console.log('links encontrados INTERNAL: ', links);
+    return links;
+  });
+    // console.log('arrayLinks', arrayLinks);
+    // // return arrayLinks;
+    // resolve(links);
+  });
+
+
+  
+
+  // pathAbs.forEach((file) => {
+  // filesPromises.push(getLinks(file));
+  // console.log('fileprimises', filesPromises);
+  // return Promise.all(filesPromises)
+  // .then(filesPromises => {
+  //     const links = filesPromises.map(file => {
+  //     getLinks(file);
+  //     });
+  //     console.log('links encontrados: ', links);
+  //     pathAbs.forEach((file) => filesPromises.push(getLinks(file)));
+  //   })
+
+
+
+//  pathAbs.forEach(file => {
+//     filesPromises.push(getLinks(file));
+//   });
+//   Promise.all(filesPromises).then(links => {
+//      links.forEach(element => getLinks(element));
+//       // const linkName = link.match(/\[.*\]/)[0].replace(/\[|\]/g, '');
+//       // const linkUrl = link.match(/\(.*\)/)[0].replace(/\(|\)/g, '');
+//       // return {
+//       //   text: linkName,
+//       //   url: linkUrl,
+//       //   file: fileLinks,
+//       // };
+//     });
+//     console.log('Destructure', arrayLinksStructure);
+//     return arrayLinksStructure;
+
+
+  //     };
+  // pathAbs.forEach((file) => filesPromises.push(getLinks(file)));
+  // return filesPromises;
+// };
+
+// console.log('filesPromises', filesPromises);
+// console.log('getLinksFiles', getLinksFiles(filesPromises));
+
+// seccion linea 56 de getFiles
+// if(filesDirectory.length > 0){
+//   console.log('filesDirectory', filesDirectory);
+//   // let filesDirectoryPromises = [];
+//   // filesDirectory.map((file) => {
+//   //   filesDirectoryPromises.push(getLinksMd(pathAbs + '/' + file));
+//   // });
+//   // Promise.all(filesDirectoryPromises).then((arrayLinks) => {
+//   //   console.log('arrayLinks', arrayLinks);
+//   //   arrayLinks.map((links) => {
+//   //     getFiles(pathAbs);
+//   //     getLinksMd(pathAbs);
+//   //     console.log('links', links);
+//   //   });
+//   // });
+//   /*opcion2*/
+//   // console.log('filesDirectory', filesDirectory);
+//   // getFiles(pathAbs);
+      
+//   // getLinksMd(file);
+
+//   //  getLinksFiles(filesDirectory);
+//   // getLinksMd(pathAbs);
+//   // console.log('Hay archivos .md en el directorio');
+// } else
+
+
+// // /* ---------- Obtener links array de archivos .md ---------- */
+// const getLinksFiles = (pathAbs) => new Promise((resolve, reject) => {
+//   // pathAbs = pathAbs.replace(/\\/g, '/');
+//   let fileLinks = pathAbs;
+//   fs.readFile(fileLinks, 'utf-8', (error, data) => {
+//     data = [...globalFiles].filter(file => isFileMd(file) === true);
+//     console.log('data', data);
+//     data.forEach((file) => {
+//       const regularExpression = /\[([^\[]+)\](\(.*\))/g;
+//       const internalLinks = data.match(regularExpression);
+//       console.log('links encontrados INTERNAL: ', internalLinks);
+//       if (error) {
+//         reject(new Error(`${error.code}, ' ❌ Error de lectura del archivo ${file}'`));
+//       } else {
+//         getLinksMd(file).then((links) => {
+//         resolve(links);
+//         console.log('links encontrados INTERNAL: ', links);
+//       });
+//       // resolve(links);
+//       }
+//     });
+//   });
+// });
+
+
+
+/*OPTIONS*/
+// if (options === '--v' || options === '--validate') {
+        //   return Promise.all(
+        //     arrayLinksStructure.map(link => {
+        //     return validate(link.url).then(response => {
+        //       return {
+        //         text: link.text,
+        //         url: link.url,
+        //         file: link.file,
+        //         status: response.status,
+        //         str: 'OK',
+        //       };
+        //     }).catch(error => {
+        //       return {
+        //         text: link.text,
+        //         url: link.url,
+        //         file: link.file,
+        //         status: error.response.status,
+        //         str: 'Fail',
+        //       }
+        //     });
+            
+        //   })
+        //   ).then(arrayLinksStructure => {
+        //     return arrayLinksStructure;
+        //   });
