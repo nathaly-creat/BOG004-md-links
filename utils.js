@@ -599,3 +599,40 @@ const files = fs.readdirSync(pathAbs).filter(file => isFileMd(file));
         //   ).then(arrayLinksStructure => {
         //     return arrayLinksStructure;
         //   });
+
+
+        /*AQUI FUNCIONANDO*/
+        // let globalFiles = [];
+// const getFiles = (pathAbs, globalFiles) => {
+// return new Promise((resolve) => {
+//     // let arrFiles = [];
+    
+//     const files = fs.readdirSync(pathAbs);  
+//     files.forEach(file => {
+//         const filePath = path.join(pathAbs, file); 
+//         // console.log('filePath', filePath);
+//         if (isFileMd(filePath)) {
+//         // globalFiles.push(filePath);
+//         } else if (isDirectory(filePath)) {
+//           getFiles(filePath , globalFiles);
+//         }
+//         });
+        
+//         // console.log('arrayFiles', arrFiles);
+//         Promise.all(arrFiles).then((files) => {
+//           console.log('files', files);
+//           globalFiles = files;
+
+//           if (globalFiles.length > 0) {
+//             getLinksFiles(globalFiles);
+//             resolve(globalFiles);
+//           } else {
+//             console.log('No hay archivos .md en el directorio');
+            
+//           }
+//           // resolve(files)
+//           // console.log('globalFilesRESOLVE ', resolve(globalFiles));
+//         });
+        
+//     });
+//   };   
