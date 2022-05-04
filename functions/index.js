@@ -24,13 +24,14 @@ const checkPathType = (pathAbs) => new Promise((resolve, reject) => {
     });
 });
 
-const mdLinks = (imputRoute) => { return new Promise ((resolve) => {
+const mdLinks = (imputRoute, options) => { return new Promise ((resolve) => {
     let pathAbs = pathAbsolute(imputRoute);    
     checkPathType(pathAbs).then((type) => {
       console.log('type', type);
       if (type === 'file') {
         console.log('Es un archivo .md', isFileMd(pathAbs));
-        getLinksMd(pathAbs).then ((links) => {
+        // getFiles(pathAbs).then ((file) => {resolve(file)});
+        getLinksMd(pathAbs, options).then ((links) => {
         resolve(links);
         });
       } else if (type === 'directory') {
@@ -41,7 +42,7 @@ const mdLinks = (imputRoute) => { return new Promise ((resolve) => {
         } else {
           let files = [];
           getFiles(pathAbs, files)
-           Promise.all(getLinksFiles(files)).then(links => {
+           Promise.all(getLinksFiles(files, options)).then(links => {
             let algo = links.flat(); 
             resolve(algo)}); 
         }

@@ -636,3 +636,16 @@ const files = fs.readdirSync(pathAbs).filter(file => isFileMd(file));
         
 //     });
 //   };   
+
+
+//****** promise all que estaba dentro de getFiles******
+// Promise.all(arrFiles).then((files) => {
+//   // console.log('filesB', files);
+//   globalFiles = files;
+//   if (globalFiles.length > 0) {
+//     // console.log('globalFiles', globalFiles);
+//     getLinksFiles(globalFiles);
+//   }
+//   // resolve(files);
+//   resolve(globalFiles);
+// });
