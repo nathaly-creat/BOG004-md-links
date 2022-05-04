@@ -1,17 +1,18 @@
-const mdLinks = require('../');
+// const mdLinks = require('../');
 
+// array = [{},{},{}]
+// describe('mdLinks', () => {
 
-describe('mdLinks', () => {
-
-  it('should...', () => {
-    console.log('FIX ME!');
-  });
+//   it('should...', () => {
+//     console.log('FIX ME!');
+//   });
 
   
-  it('should...', () => {
-    let = []
-    console.log('FIX ME!');
-    expect(true).toBe(true);
-  });
+//   it('should...', () => {
+//     let = []
+//     console.log('FIX ME!');
+//     mdlinks (doc,options)
+//     expect(['','']).toBe(array;
+//   });
 
-});
+// });
