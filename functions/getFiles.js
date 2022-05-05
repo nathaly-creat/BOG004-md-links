@@ -49,7 +49,7 @@ const getLinksMd = (pathAbs, options) => {
             };
             promesa.push(linkObj);
             // ****************seccion de optios********************
-            if (options) {
+            if (options.validate) {
               valideOptions = promesa.map((link) => {
                 return validate(link.href)
                   .then((response) => {
@@ -87,7 +87,7 @@ const getLinksMd = (pathAbs, options) => {
 // });
 
 const getLinksFiles = (arrayPathAbs, options) => {
-  return arrayPathAbs.map((file) => {
+   return arrayPathAbs.map((file) => {
     return getLinksMd(file, options);
   });
 };

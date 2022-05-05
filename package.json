@@ -10,7 +10,10 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jest --env=jsdom --coverage"
+    "test": "jest --env=jsdom --coverage",
+    "lint": "eslint --fix",
+    "build": "npm run lint && npm run test",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",

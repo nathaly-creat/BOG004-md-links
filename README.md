@@ -39,11 +39,7 @@ Con `validate:false` :
     - `file`: Ruta del archivo donde se encontró el link.
 
     Reporte:
-    [{ 
-      href, 
-      text, 
-      file,
-    }]
+    [{ href, text, file, }]
 
 **Con [options]:**
 ----
@@ -54,13 +50,7 @@ Con `validate:false` :
        - El reporte arrojara: Mensaje (str) de OK o FAIL, estado del link (HTTP).
 
        Reporte se corresponde a:
-       [{ 
-         href, 
-         text, 
-         file,
-         status,
-         str,
-       }]
+       [{ href, text, file, status, str, }]
 
 ### *Estadísticas del archivo markdown:*
 

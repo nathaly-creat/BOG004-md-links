@@ -2,30 +2,33 @@ const path = require("path");
 const fs = require("fs");
 const { getFiles, getLinksFiles } = require("./getFiles.js");
 const { getLinksMd } = require("./getFiles.js");
+const { pathAbsolute, checkPathType } = require("./readPath.js");
 
-const isFileMd = (pathAbs) => path.extname(pathAbs) === ".md";
-const isDirectory = (pathAbs) => fs.lstatSync(pathAbs).isDirectory();
+// const isFileMd = (pathAbs) => path.extname(pathAbs) === ".md";
+// const isDirectory = (pathAbs) => fs.lstatSync(pathAbs).isDirectory();
 
-const pathAbsolute = (imputRoute) =>
-  path.isAbsolute(imputRoute) ? imputRoute : path.resolve(imputRoute);
+// const pathAbsolute = (imputRoute) =>
+//   path.isAbsolute(imputRoute) ? imputRoute : path.resolve(imputRoute);
 
-const checkPathType = (pathAbs) =>
-  new Promise((resolve, reject) => {
-    fs.stat(pathAbs, (err, stats) => {
-      if (err) {
-        console.log("❌ No es un archivo.md o un directorio");
-        reject(err);
-      } else {
-        if (stats.isFile()) {
-          resolve("file");
-        } else if (stats.isDirectory()) {
-          resolve("directory");
-        }
-      }
-    });
-  });
+// const checkPathType = (pathAbs) =>
+//   new Promise((resolve, reject) => {
+//     fs.stat(pathAbs, (err, stats) => {
+//       if (err) {
+//         console.log("❌ No es un archivo.md o un directorio");
+//         reject(err);
+//       } else {
+//         if (stats.isFile()) {
+//           // console.log("✅ Es un archivo .md", isFileMd(pathAbs));
+//           resolve("file");
+//         } else if (stats.isDirectory()) {
+//           // console.log("✅ Es un directorio", isDirectory(pathAbs));
+//           resolve("directory");
+//         }
+//       }
+//     });
+//   });
 
-const mdLinks = (imputRoute, options) => {
+const mdLinks = (imputRoute, options = {validate: false}) => {
   return new Promise((resolve) => {
     let pathAbs = pathAbsolute(imputRoute);
     checkPathType(pathAbs).then((type) => {
@@ -44,8 +47,8 @@ const mdLinks = (imputRoute, options) => {
           let files = [];
           getFiles(pathAbs, files);
           Promise.all(getLinksFiles(files, options)).then((links) => {
-            let algo = links.flat();
-            resolve(algo);
+            let petLinks = links.flat();
+            resolve(petLinks);
           });
         }
       }
