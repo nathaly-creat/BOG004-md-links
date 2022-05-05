@@ -32,6 +32,7 @@ const mdLinks = (imputRoute, options) => {
       if (type === "file") {
         // console.log("Es un archivo .md", isFileMd(pathAbs));
         getLinksMd(pathAbs, options).then((links) => {
+
           resolve(links);
         });
       } else if (type === "directory") {

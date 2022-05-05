@@ -53,7 +53,7 @@ const getLinksMd = (pathAbs, options) => {
               valideOptions = promesa.map((link) => {
                 return validate(link.href)
                   .then((response) => {
-                    objTotal = { ...link, ...response };
+                    objTotal = {...link, ...response };
                     return objTotal;
                   })
                   .catch((error) => {
