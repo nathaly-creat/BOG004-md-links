@@ -5,7 +5,7 @@ const { pathAbsolute } = require("./get_methods");
 const { validateTypeFiles } = require("./get_methods.js");
 
 
-const mdLinks = (imputRoute, options = {validate: false}) => {
+const mdLinks = (imputRoute, options = { validate: false }) => {
   return new Promise((resolve) => {
     let pathAbs = pathAbsolute(imputRoute);
     validateTypeFiles(pathAbs, options).then((objectLinks) => {

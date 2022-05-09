@@ -3,6 +3,11 @@
 
 Librería que permite extraer y validar links en archivos markdown (.md), obteniendo estadísticas de links totales, únicos y rotos.
 
+
+
+# Diagrama de Flujo
+[Diagrama de Flujo](https://www.figma.com/file/3wXsiTaU1mi2sTTKcMw5V2/Untitled?node-id=0%3A1)
+
 # 1- CLI
 
 
@@ -41,6 +46,8 @@ Con `validate:false` :
     Reporte:
     [{ href, text, file, }]
 
+![validateFalse](https://res.cloudinary.com/dtaq1ip2g/image/upload/v1652117108/validate_false_ryby7p.png)
+
 **Con [options]:**
 ----
 - --validate o --v:
@@ -52,60 +59,8 @@ Con `validate:false` :
        Reporte se corresponde a:
        [{ href, text, file, status, str, }]
 
-### *Estadísticas del archivo markdown:*
+    ![trueAndStats](https://res.cloudinary.com/dtaq1ip2g/image/upload/v1652117441/validate_true_--v_hne3ha.png)
 
--  --stats o --s :
-
-       - Obtendrá el total de links dentro del archivo.
-       - Genera un reporte de la cantidad de links únicos y totales dentro del archivo markdown.
-
-       Reporte:
-
-       Total: #
-       Unique: #
-
-↪️  --validate --stats o --v --s:
-       - Validará cada link dentro del archivo.
-       - Podras tener toda la informacion sobre las estadísticas --stats y los links rotos dentro del archivo. 
-
-
-### 1) JavaScript API
-
-El módulo debe poder **importarse** en otros scripts de Node.js y debe ofrecer la
-siguiente interfaz:
-
-#### `mdLinks(path, options)`
-
-##### Argumentos
-
-* `path`: Ruta **absoluta** o **relativa** al **archivo** o **directorio**.
-Si la ruta pasada es relativa, debe resolverse como relativa al directorio
-desde donde se invoca node - _current working directory_).
-* `options`: Un objeto con **únicamente** la siguiente propiedad:
-  - `validate`: Booleano que determina si se desea validar los links
-    encontrados.
-
-##### Valor de retorno
-
-La función debe **retornar una promesa** (`Promise`) que **resuelva a un arreglo**
-(`Array`) de objetos (`Object`), donde cada objeto representa un link y contiene
-las siguientes propiedades
-
-Con `validate:false` :
-
-* `href`: URL encontrada.
-* `text`: Texto que aparecía dentro del link (`<a>`).
-* `file`: Ruta del archivo donde se encontró el link.
-
-Con `validate:true` :
-
-* `href`: URL encontrada.
-* `text`: Texto que aparecía dentro del link (`<a>`).
-* `file`: Ruta del archivo donde se encontró el link.
-* `status`: Código de respuesta HTTP.
-* `ok`: Mensaje `fail` en caso de fallo u `ok` en caso de éxito.
-
-#### Ejemplo (resultados como comentarios)
 
 ```js
 const mdLinks = require("md-links");
@@ -129,66 +84,44 @@ mdLinks("./some/dir")
   .catch(console.error);
 ```
 
-### 2) CLI (Command Line Interface - Interfaz de Línea de Comando)
 
-El ejecutable de nuestra aplicación debe poder ejecutarse de la siguiente
-manera a través de la **terminal**:
 
-`md-links <path-to-file> [options]`
 
-Por ejemplo:
+### *Estadísticas del archivo markdown:*
 
-```sh
-$ md-links ./some/example.md
-./some/example.md http://algo.com/2/3/ Link a algo
-./some/example.md https://otra-cosa.net/algun-doc.html algún doc
-./some/example.md http://google.com/ Google
-```
+-  --stats o --s :
 
-El comportamiento por defecto no debe validar si las URLs responden ok o no,
-solo debe identificar el archivo markdown (a partir de la ruta que recibe como
-argumento), analizar el archivo Markdown e imprimir los links que vaya
-encontrando, junto con la ruta del archivo donde aparece y el texto
-que hay dentro del link (truncado a 50 caracteres).
+       - Obtendrá el total de links dentro del archivo.
+       - Genera un reporte de la cantidad de links únicos y totales dentro del archivo markdown.
 
-#### Options
+       Reporte:
 
-##### `--validate`
+       Total: #
+       Unique: #
 
-Si pasamos la opción `--validate`, el módulo debe hacer una petición HTTP para
-averiguar si el link funciona o no. Si el link resulta en una redirección a una
-URL que responde ok, entonces consideraremos el link como ok.
 
-Por ejemplo:
+![Stats](https://res.cloudinary.com/dtaq1ip2g/image/upload/v1652117108/stadisticas_validate_false_e9kkx4.png)
 
-```sh
-$ md-links ./some/example.md --validate
-./some/example.md http://algo.com/2/3/ ok 200 Link a algo
-./some/example.md https://otra-cosa.net/algun-doc.html fail 404 algún doc
-./some/example.md http://google.com/ ok 301 Google
-```
 
-Vemos que el _output_ en este caso incluye la palabra `ok` o `fail` después de
-la URL, así como el status de la respuesta recibida a la petición HTTP a dicha
-URL.
+↪️  --validate --stats o --v --s:
+       - Validará cada link dentro del archivo.
+       - Podras tener toda la informacion sobre las estadísticas --stats y los links rotos dentro del archivo. 
+        Reporte:
 
-##### `--stats`
+       Total: #
+       Unique: #
+       Broquen: #
 
-Si pasamos la opción `--stats` el output (salida) será un texto con estadísticas
-básicas sobre los links.
+![broquen](https://res.cloudinary.com/dtaq1ip2g/image/upload/v1652117108/validate_mas_stats_c1tudi.png)
 
-```sh
-$ md-links ./some/example.md --stats
-Total: 3
-Unique: 3
-```
 
-También podemos combinar `--stats` y `--validate` para obtener estadísticas que
-necesiten de los resultados de la validación.
+# Ayuda de CLI
 
-```sh
-$ md-links ./some/example.md --stats --validate
-Total: 3
-Unique: 3
-Broken: 1
-```
+Puede ingresar el siguiente comando en la terminal.
+
+Ejemplo:
+md-Links means --h
+
+![Ayuda](https://res.cloudinary.com/dtaq1ip2g/image/upload/v1652117860/ayuda_yakqvm.png)
+
+# Desarrollado por Nathaly Huerta.

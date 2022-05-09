@@ -65,9 +65,7 @@ function validateFalse() {
 function stats() {
   mdLinks(imputRoute, { validate: false })
     .then((links) => {
-      if (mixOptionsBoolean) {
-        brokenLinks();
-      } else {
+
         const totalLinks = links.map((link) => link.href);
         const totalLinksLength = totalLinks.length;
         const uniqueLinks = [...new Set(totalLinks)];
@@ -79,15 +77,18 @@ function stats() {
         // console.table({totalLinksLength, uniqueLinksLength});
         
       }
-    })
+    )
     .catch((err) => {
       console.log(err);
     });
 }
 
+
 function brokenLinks() {
-  mdLinks(imputRoute, mixOptionsBoolean)
+  mdLinks(imputRoute, { validate: true})
     .then((links) => {
+      if (mixOptionsBoolean === true) {
+      // console.log('brokenStats:', links);
       const totalLinks = links.map((link) => link.href);
       const totalLinksLength = totalLinks.length;
       const uniqueLinks = [...new Set(totalLinks)];
@@ -100,12 +101,14 @@ function brokenLinks() {
             Broken: brokenLinksLength,
         }
       console.table(brokenList);
+      }
     
     })
     .catch((err) => {
       console.log(err);
     });
 }
+
 
 function help () {
     console.log(chalk.blueBright.bold('🔷', chalk.white.bold('[ruta]:'), chalk.bgYellowBright('\n'), chalk.white('Puede ingresar ruta absoluta o relativa.')));
