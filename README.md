@@ -11,7 +11,7 @@ Librería que permite extraer y validar links en archivos markdown (.md), obteni
 # 1- CLI
 
 
-*COLOCAR EXTENSION NPM*
+npm i md-links-nathaly-creat
 
 # 1.2 Guía de Funcionalidad.
 
