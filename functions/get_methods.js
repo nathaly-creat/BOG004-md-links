@@ -13,7 +13,7 @@ const checkPathType = (pathAbs) =>
     fs.stat(pathAbs, (err, stats) => {
       if (err) {
         // console.log("❌ No es un archivo.md o un directorio");
-        reject(err);
+        reject(' No es un archivo.md o un directorio',err);
       } else {
         if (stats.isFile()) {
           // console.log("✅ Es un archivo .md", isFileMd(pathAbs));
@@ -45,32 +45,6 @@ const getFiles = (pathAbs, globalFiles) => {
   return globalFiles;
 };
 
-"use strict";
-let fetch = require("node-fetch");
-const validate = (link) => {
-  return fetch(link)
-    .then((response) => {
-      if (response.status >= 200 && response.status < 400) {
-        // console.log('response in validate ok:', response.status, link);
-        return {
-          status: response.status,
-          str: "OK",
-        };
-      } else {
-        // console.log('response in validate fail:', response.status, link);
-        return {
-          status: response.status,
-          str: "Fail",
-        };
-      }
-    })
-    .catch((error) => {
-      console.log("error in validate", error.status, link);
-      return link;
-    });
-};
-
-
 // /* ---------- Obtener links archivo .md ---------- */
 const getLinksMd = (pathAbs, options) => new Promise ((resolve, reject) => {
   let promesa = [];
@@ -79,8 +53,7 @@ const getLinksMd = (pathAbs, options) => new Promise ((resolve, reject) => {
     let fileLinks = pathAbs;
     fs.readFile(fileLinks, "utf8", (err, data) => {
       if (err) {
-       
-        reject(errMessage);
+        reject(errMessage = "No es un archivo .md");
       } else {
         let links = data.match(/\[(.*?)\]\((.*?)\)/g);
         if (links !== null) {
@@ -94,13 +67,13 @@ const getLinksMd = (pathAbs, options) => new Promise ((resolve, reject) => {
               file: fileLinks,
             };
             promesa.push(linkObj);
+            
             // // ****************seccion de options********************
             if (options.validate) {
               valideOptions = promesa.map((link) => {
                 return validate(link.href)
-                  .then((response) => {
-                    objTotal = Object.assign(linkObj, response);
-                    
+                .then((response) => {
+                    objTotal = Object.assign(link, response);
                     return objTotal;
                   })
                   .catch((error) => {
@@ -131,6 +104,34 @@ const getLinksMd = (pathAbs, options) => new Promise ((resolve, reject) => {
 /* ---------- opcion 1 Obtener links de array archivos .md ---------- */
 // });
 
+"use strict";
+let fetch = require("node-fetch");
+const validate = (link) => {
+  // console.log("validando", link);
+  return fetch(link)
+    .then((response) => {
+      // console.log("responseFETCH", response.status);
+      if (response.status >= 200 && response.status < 400) {
+        // console.log('response in validate ok:', response.status, link);
+        return {
+          status: response.status,
+          str: "OK",
+        };
+      } else {
+        // console.log('response in validate fail:', response.status, link);
+        return {
+          status: response.status,
+          str: "Fail",
+        };
+      }
+    })
+    .catch((error) => {
+      console.log("error in validate", error.status, link);
+      // return link;
+    });
+};
+
+
 const getLinksFiles = (arrayPathAbs, options) => {
    return arrayPathAbs.map((file) => {
     return getLinksMd(file, options);
@@ -141,13 +142,14 @@ const getLinksFiles = (arrayPathAbs, options) => {
 const validateTypeFiles = (pathAbs, options) => new Promise (resolve => {
   const isDirResult = fs.statSync(pathAbs).isDirectory(); // es directorio? booleano
   if(isDirResult === false){
+    // console.log('estoy en archivo .md', isDirResult);
     getLinksMd(pathAbs, options).then((links) => {
       resolve(links);
     });
   } else {
     const filesDirectory = fs.readdirSync(pathAbs);
         if (filesDirectory.length === 0) {
-          console.log("No hay archivos .md en el directorio");
+          resolve("No hay archivos .md en el directorio");
         } else {
           let files = [];
           getFiles(pathAbs, files);

@@ -18,17 +18,21 @@ const mixOptionsBoolean =
 if (args.includes("--validate") || args.includes("--v")) {
   console.log(chalk.bgYellow(chalk.black("Reporte.")));
   validateLinks();
+
 } else if (args.includes("--stats") || args.includes("--s")) {
   console.log(chalk.bgYellow(chalk.black("Reporte.")));
   stats();
+
 } else if (mixOptionsBoolean) {
   console.log(chalk.bgYellow(chalk.black("Reporte.")));
   brokenLinks();
+
 } else if (args.includes("--help") || args.includes("--h")) {
 //   console.log(chalk.blue("Ayuda."));
   console.log('Ingresar CLI:', chalk.bgYellowBright("md-links [ruta] [opciones]", '\n'));
     console.log(chalk.bgWhite('[ruta] y [opciones] se ingresa sin [].') , chalk.bgYellowBright('\n'));
   help();
+  
 } else if (argsValidator === undefined) {
   console.log(chalk.bgYellow(chalk.black("Reporte.")));
   validateFalse();
@@ -61,9 +65,7 @@ function validateFalse() {
 function stats() {
   mdLinks(imputRoute, { validate: false })
     .then((links) => {
-      if (mixOptionsBoolean) {
-        brokenLinks();
-      } else {
+
         const totalLinks = links.map((link) => link.href);
         const totalLinksLength = totalLinks.length;
         const uniqueLinks = [...new Set(totalLinks)];
@@ -75,15 +77,18 @@ function stats() {
         // console.table({totalLinksLength, uniqueLinksLength});
         
       }
-    })
+    )
     .catch((err) => {
       console.log(err);
     });
 }
 
+
 function brokenLinks() {
-  mdLinks(imputRoute, mixOptionsBoolean)
+  mdLinks(imputRoute, { validate: true})
     .then((links) => {
+      if (mixOptionsBoolean === true) {
+      // console.log('brokenStats:', links);
       const totalLinks = links.map((link) => link.href);
       const totalLinksLength = totalLinks.length;
       const uniqueLinks = [...new Set(totalLinks)];
@@ -96,12 +101,14 @@ function brokenLinks() {
             Broken: brokenLinksLength,
         }
       console.table(brokenList);
+      }
     
     })
     .catch((err) => {
       console.log(err);
     });
 }
+
 
 function help () {
     console.log(chalk.blueBright.bold('🔷', chalk.white.bold('[ruta]:'), chalk.bgYellowBright('\n'), chalk.white('Puede ingresar ruta absoluta o relativa.')));
