@@ -13,7 +13,7 @@ const checkPathType = (pathAbs) =>
     fs.stat(pathAbs, (err, stats) => {
       if (err) {
         // console.log("❌ No es un archivo.md o un directorio");
-        reject(err);
+        reject(' No es un archivo.md o un directorio',err);
       } else {
         if (stats.isFile()) {
           // console.log("✅ Es un archivo .md", isFileMd(pathAbs));
@@ -66,7 +66,7 @@ const validate = (link) => {
     })
     .catch((error) => {
       console.log("error in validate", error.status, link);
-      return link;
+      // return link;
     });
 };
 
@@ -79,8 +79,7 @@ const getLinksMd = (pathAbs, options) => new Promise ((resolve, reject) => {
     let fileLinks = pathAbs;
     fs.readFile(fileLinks, "utf8", (err, data) => {
       if (err) {
-       
-        reject(errMessage);
+        reject(errMessage = "No es un archivo .md");
       } else {
         let links = data.match(/\[(.*?)\]\((.*?)\)/g);
         if (links !== null) {
@@ -147,7 +146,7 @@ const validateTypeFiles = (pathAbs, options) => new Promise (resolve => {
   } else {
     const filesDirectory = fs.readdirSync(pathAbs);
         if (filesDirectory.length === 0) {
-          console.log("No hay archivos .md en el directorio");
+          resolve("No hay archivos .md en el directorio");
         } else {
           let files = [];
           getFiles(pathAbs, files);

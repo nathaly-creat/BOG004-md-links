@@ -18,17 +18,21 @@ const mixOptionsBoolean =
 if (args.includes("--validate") || args.includes("--v")) {
   console.log(chalk.bgYellow(chalk.black("Reporte.")));
   validateLinks();
+
 } else if (args.includes("--stats") || args.includes("--s")) {
   console.log(chalk.bgYellow(chalk.black("Reporte.")));
   stats();
+
 } else if (mixOptionsBoolean) {
   console.log(chalk.bgYellow(chalk.black("Reporte.")));
   brokenLinks();
+
 } else if (args.includes("--help") || args.includes("--h")) {
 //   console.log(chalk.blue("Ayuda."));
   console.log('Ingresar CLI:', chalk.bgYellowBright("md-links [ruta] [opciones]", '\n'));
     console.log(chalk.bgWhite('[ruta] y [opciones] se ingresa sin [].') , chalk.bgYellowBright('\n'));
   help();
+  
 } else if (argsValidator === undefined) {
   console.log(chalk.bgYellow(chalk.black("Reporte.")));
   validateFalse();
